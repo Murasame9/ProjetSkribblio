@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    #main{
+        display: flex;
+    }
+    
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(40,1fr);
+        grid-template-rows: repeat(50,1fr);
+        border: solid black 1px;
+    }
+
+    .case{
+        border: solid rgb(240, 240, 240) 0.1px;
+        height: 7px;
+        width: 7px;
+    }
+
+    #palette{
+        display: flex;
+        flex-flow: wrap;
+        width: 200px;
+        height: 250px;
+        right: 0;
+        align-items: center;
+        margin: 2% 0 0 4%;
+    }
+
+    .couleurs{
+        height: 50px;
+        width: 50px;
+        border: solid black 1px;
+        margin-top: 2px;
+        margin-left: 7px;
+    }
+
+    .couleurs:hover{
+        cursor: pointer;
+    }
+
+    .couleurAdd{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 183px;
+        font-size: 20px;
+    }
+
+    #options{
+        width: 300px;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;    
+    }
+
+    .btn_options{
+        width: 200px;
+        border: solid black 1px;
+        text-align: center;
+        margin-left: 10%;
+        margin-bottom: 14%;
+    }
+
+    .btn_options:hover{
+        cursor: pointer;
+        background-color: rgb(180, 180, 180);
+    }
+
+    #rgbSection{
+        width: 100px;
+        height: 20px;
+        margin-left: 60px;
+    }
+
+    #erase{
+        margin-top : -15px;
+    }
+</style>
+<body>
+    <div id="main">
+        <div id="grille"></div>
+        <div id="palette">
+    </div>
+        <div id="options">
+            <div>
+                <div class = "btn_options" id="color_add">Cliquez ici quand vous avez renseigné un code RGB <br>ci-dessous</div>
+                <input type="text" id="rgbSection">
+            </div>
+
+            <div class = "btn_options" id="erase">Effacer la palette</div>
+            </div>    
+
+        </div>   
+
+    </div>
+
+</body>
+
+<script>
+
+
+document.onselectstart = new Function ("return false");
+    if(window.sidebar)
+    {
+        document.onmousedown = false;
+        document.onclick = true;
+    }
+
+    var taille = 2000;
+    var grille = document.getElementById("grille");
+    var currentColor;
+    var coloringIsActivate = false;
+
+    var palette = document.getElementById("palette");
+
+    var btn_options = document.querySelectorAll('btn_options');
+
+    var eraser = document.getElementById("erase");
+    eraser.addEventListener('click', createGrid);
+
+    var color_add = document.getElementById("color_add");
+    color_add.addEventListener('click', f_colorAdd);
+
+
+    document.body.addEventListener('mousedown',activeColoring);
+    document.body.addEventListener('mouseup',desactiveColoring);
+
+    var rgbSection = document.getElementById("rgbSection");
+
+    var Tcolors = ['silver','gray','black','red','darkred','yellow','olive','lime','green','aqua','teal','blue','navy','fuchsia','purple'];
+    
+    function createGrid(){
+        grille.innerHTML='';
+        for(var i = 0; i < taille;i++){
+            var cellules = document.createElement("div");
+            cellules.addEventListener('mouseover', coloring);
+            cellules.className = "case";
+            grille.appendChild(cellules);
+            cellules.style.height = 10+"px";
+            cellules.style.width = cellules.style.height;
+            cellules.style.backgroundColor ="white";
+        }
+    }
+
+    function createPalette(){
+        palette.innerHTML='';
+
+        for(var i = 0; i < Tcolors.length;i++){
+            var couleurs = document.createElement('div');
+            couleurs.className = "couleurs";
+            palette.appendChild(couleurs);
+            couleurs.style.background =Tcolors[i];
+            couleurs.addEventListener('click',coloringChoice);
+        }
+    }
+
+    function coloringChoice(e){
+        currentColor = e.target.style.backgroundColor;
+    }
+
+    function coloring(e){
+        if(coloringIsActivate){
+        e.target.style.backgroundColor = currentColor;   
+        }   
+
+        document.body.onkeydown = function(touche){
+        if(touche.keyCode == 65){
+            e.target.style.backgroundColor = "white"; 
+        }
+        }
+    }
+
+    function activeColoring(){
+        coloringIsActivate = true;
+    }
+
+    function desactiveColoring(){
+        coloringIsActivate = false;
+    }
+
+    function DisplayRGBSection(){
+        if(rgbSection.style.display == "none"){
+            rgbSection.style.display = "block";
+        } else{ 
+            rgbSection.style.display = "none";
+        }
+    }
+
+    function f_colorAdd(){
+        do{
+        var virgule = 0, r = 0, g = 0; b = 0;        
+
+        newColor = rgbSection.value;
+
+        for(var i = 0; i < newColor.length ; i++){
+            if(newColor[i]==','){
+                virgule++;
+                i++
+            }
+
+            if(virgule==0){
+                r += newColor[i];
+            } else if (virgule == 1){
+                g += newColor[i];
+            } else if (virgule == 2){
+                b += newColor[i];
+            }
+        }
+        } while((r<0)||(r>255)||(g<0)||(g>255)||(b<0)||(b>255))
+
+        var couleurs = document.createElement('div');
+        couleurs.className = "couleurs";
+        newColor = "rgb("+newColor+")";
+        Tcolors.push(newColor);
+        createPalette();
+        rgbSection.value = "";
+    }
+    
+    createGrid();
+
+    createPalette();
+
+</script>
+</html>
