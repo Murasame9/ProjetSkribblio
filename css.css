@@ -5,13 +5,13 @@
 #grille{
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(40,1fr);
-    grid-template-rows: repeat(50,1fr);
+    grid-template-columns: repeat(160,1fr);
+    grid-template-rows: repeat(200,1fr);
     border: solid black 1px;
 }
 
 .case{
-    border: solid rgb(240, 240, 240) 0.1px;
+    border: solid rgb(240, 240, 240) 0.01px;
     height: 7px;
     width: 7px;
 }

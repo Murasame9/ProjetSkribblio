@@ -5,7 +5,7 @@ document.onselectstart = new Function ("return false");
         document.onclick = true;
     }
 
-    var taille = 2000;
+    var taille = 32000;
     var grille = document.getElementById("grille");
     var currentColor;
     var coloringIsActivate = false;
@@ -35,7 +35,7 @@ document.onselectstart = new Function ("return false");
             cellules.addEventListener('mouseover', coloring);
             cellules.className = "case";
             grille.appendChild(cellules);
-            cellules.style.height = 10+"px";
+            cellules.style.height = 5+"px";
             cellules.style.width = cellules.style.height;
             cellules.style.backgroundColor ="white";
         }
