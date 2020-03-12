@@ -8,11 +8,13 @@
     <link href="css/main.css" rel="stylesheet">
 </head>
 <body>
-    <canvas id="canvas"></canvas>
     <div>
-        <p></p>
+        <canvas id="canvas"></canvas>
+        <div id="chat">
+            <p></p>
+        </div>
     </div>
-    <input type="text" id="fname"><br>
+    <input type="text" id="text" onkeypress="Test()"><br>
 </body>
 <script src="./lib/socket.io.js"></script>
 <script src="./js/main.js"></script>

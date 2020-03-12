@@ -1,18 +1,49 @@
 var socket = io();
-socket.emit("log", "bonjour je suis vivant ENFIN");
+//ocket.emit("log", "bonjour je suis vivant ENFIN");
+
+var pseudo = Math.floor(Math.random()*400);
+
+socket.emit("setPseudo",pseudo); // Donne un pseudo
 
 socket.on("log", function(data){
     console.log(data);
 });
 
-io.on(/* Curseur dans l'input + enter */, envoyeMessage)
+socket.on("messageSend", function(data){
+    receiveMessage(data);
+});
 
-function envoyeMessage(/* Ce qu'a écrit le gars dans l'input */){
-    /* Recup ce qui a dans l'input et l'ecrit au dessus dans un p */
+socket.on("updateCanvas", function(data){
+    receiveCanvasData(data);
+});
+
+//socket.on(, envoyeMessage())
+
+function receiveMessage(data){
+    var paragraphe = document.createElement("p");
+    paragraphe.innerText = data.pseudo+" : "+data.msg;
+    document.getElementById("chat").appendChild(paragraphe);
+}
+
+function envoyeMessage(message){
+    console.log(message);
+    var paragraphe = document.createElement("p");
+    paragraphe.innerText = pseudo + " : " + message;
+    document.getElementById("chat").appendChild(paragraphe);
+    socket.emit("sendMessage", {"msg":message, "pseudo": pseudo});
 };
 
+function Test(){
+    var key = event.keyCode;
+    var input = document.getElementById("text");
+    console.log(key);
+    if (key == 13){
+        envoyeMessage(input.value);
+        input.value = "";
+    }
+}
 
-// Canvas 
+// Canvas
 var fps = 30;
 var frameDuration = 1000/fps;
 var w = 500;
@@ -26,6 +57,15 @@ canvas.height = h;
 var ctx = canvas.getContext("2d");
 
 var jeDoisDessiner = false;
+
+function sendCanvasData(){
+    var imgData = ctx.getImageData(0,0,100, 100);
+    socket.emit("updateCanvas", imgData);
+}
+
+function receiveCanvasData(data){
+    ctx.putImageData(data);
+}
 
 requestAnimationFrame(update);
 function update(timestamp) {
@@ -43,10 +83,11 @@ function dessiner() {
 }
 
 document.addEventListener("mousemove",onDocMouseMove);
-document.addEventListener("mousedown",onDocMouseDown);
+canvas.addEventListener("mousedown",onDocMouseDown);
 document.addEventListener("mouseup",onDocMouseUp);
 
 function onDocMouseDown() {
+    console.log("je dessine");
     ctx.moveTo(mouseX,mouseY);
     jeDoisDessiner = true;
 }
