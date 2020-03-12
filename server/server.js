@@ -13,7 +13,6 @@ http.listen(3000, function(){
     console.log("listening...");
 });
 
-// Quand il se connecte il envoie a tout le monde bjr
 io.on('connect', function(socket){
 
     socket.on("log", function(data){
@@ -32,6 +31,9 @@ io.on('connect', function(socket){
         setPseudo(socket,data);
     });
 
+    socket.on('setRoom', function(data){
+        setRoom(socket,data);
+    });
 
     /*socket.join('room1');
     socket.broadcast.to("room1").emit("log", "bjr"); // envoie a tt le monde sauf a lui meme (broadcast)
@@ -49,12 +51,20 @@ function updateCanvas(socket, data){
     socket.broadcast.emit("updateCanvas", data);
 }
 
+var sauvegardMessage = [];
+
 function onMessageReceived(socket, data){
+    // Mettre le message dans un tableau
+    sauvegardMessage.push(data);
     socket.broadcast.emit("messageSend", data);
 }
 
 function setPseudo(socket, data){
     socket.pseudo = data;
+}
+
+function setRoom(socket, data){
+    socket.room = data;
 }
 
 // Socket.pseudo = <- ca va crée une variable pseudo qui sera propose au joueur

@@ -2,22 +2,24 @@ var socket = io();
 //ocket.emit("log", "bonjour je suis vivant ENFIN");
 
 var pseudo = Math.floor(Math.random()*400);
+var room = 1;
 
 socket.emit("setPseudo",pseudo); // Donne un pseudo
+socket.emit("setRoom",room); // Donne une room
 
 socket.on("log", function(data){
     console.log(data);
 });
 
+// Fonction Messages
 socket.on("messageSend", function(data){
     receiveMessage(data);
 });
 
+// Fonction Canvas (qui ne marche pas encore)
 socket.on("updateCanvas", function(data){
     receiveCanvasData(data);
 });
-
-//socket.on(, envoyeMessage())
 
 function receiveMessage(data){
     var paragraphe = document.createElement("p");
@@ -33,7 +35,7 @@ function envoyeMessage(message){
     socket.emit("sendMessage", {"msg":message, "pseudo": pseudo});
 };
 
-function Test(){
+function testKey(){
     var key = event.keyCode;
     var input = document.getElementById("text");
     console.log(key);
