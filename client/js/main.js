@@ -6,6 +6,7 @@ var room = 1;
 
 socket.emit("setPseudo",pseudo); // Donne un pseudo
 socket.emit("setRoom",room); // Donne une room
+socket.emit("affichageMessagesPrecedents"); // affiche les messages envoyé dans le chat avant que l'utilisateur ne se connect
 
 socket.on("log", function(data){
     console.log(data);

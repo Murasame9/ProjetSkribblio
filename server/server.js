@@ -35,6 +35,10 @@ io.on('connect', function(socket){
         setRoom(socket,data);
     });
 
+    socket.on('affichageMessagesPrecedents', function(){
+        afficheMessagesPrecedents();
+    });
+
     /*socket.join('room1');
     socket.broadcast.to("room1").emit("log", "bjr"); // envoie a tt le monde sauf a lui meme (broadcast)
 
@@ -65,6 +69,11 @@ function setPseudo(socket, data){
 
 function setRoom(socket, data){
     socket.room = data;
+}
+
+function afficheMessagesPrecedents(){
+    // Mettre un truc pour qu'il y ai que la personne qui le recois
+    socket.emit("afficherLesMessagesPrecedents",sauvegardMessage);
 }
 
 // Socket.pseudo = <- ca va crée une variable pseudo qui sera propose au joueur
