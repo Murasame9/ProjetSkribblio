@@ -17,16 +17,29 @@ socket.on("messageSend", function(data){
     receiveMessage(data);
 });
 
-// Fonction Canvas (qui ne marche pas encore)
-socket.on("updateCanvas", function(data){
-    receiveCanvasData(data);
-});
-
 function receiveMessage(data){
     var paragraphe = document.createElement("p");
     paragraphe.innerText = data.pseudo+" : "+data.msg;
     document.getElementById("chat").appendChild(paragraphe);
 }
+
+// Fonction Afficher les messages précedent
+socket.on("afficherLesMessagesPrecedents", function(data){
+    afficheMessagesPre(data);
+});
+
+function afficheMessagesPre(data){
+    for (var i = 0; i < data.length; i++){
+        var paragraphe = document.createElement("p");
+        paragraphe.innerText = data[i].pseudo+" : "+data[i].msg;
+        document.getElementById("chat").appendChild(paragraphe);
+    }
+}
+
+// Fonction Canvas (qui ne marche pas encore)
+socket.on("updateCanvas", function(data){
+    receiveCanvasData(data);
+});
 
 function envoyeMessage(message){
     console.log(message);
@@ -127,6 +140,7 @@ canvas.addEventListener("mousedown",onDocMouseDown);
 document.addEventListener("mouseup",onDocMouseUp);
 
 function onDocMouseDown() {
+    ctx.beginPath();
     console.log("je dessine");
     ctx.moveTo(mouseX,mouseY);
     jeDoisDessiner = true;
